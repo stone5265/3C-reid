@@ -1,2 +1,3 @@
-# 3C-reid
-3C: Confidence-Guided Clustering and Contrastive Learning for Unsupervised Person Re-Identification
+# 3C: Confidence-Guided Clustering and Contrastive Learning for Unsupervised Person Re-Identification
+
+![framework](figs/framework.pdf)
