@@ -39,18 +39,20 @@ class MemoryTable(object):
         if min_instances is not None:
             labels_index, labels_count = np.unique(labels, return_counts=True)
             removed_labels = labels_index[np.where(labels_count < min_instances)]
+            num_removed_labels = removed_labels.size
             retained_labels = labels_index[np.where(labels_count >= min_instances)]
             retained_labels = sorted(retained_labels[retained_labels != -1])
             centroids = centroids[retained_labels]
             offset_table = np.zeros_like(labels)
             for removed_label in sorted(removed_labels):
                 if removed_label == -1:
+                    num_removed_labels -= 1
                     continue
                 offset_table[labels == removed_label] = 0
                 offset_table[labels > removed_label] -= 1
                 labels[labels == removed_label] = -1
             labels += offset_table
-            num_clusters -= removed_labels.size
+            num_clusters -= num_removed_labels
 
         self.pseudo_labels = labels
         self.num_clusters_cur = num_clusters
