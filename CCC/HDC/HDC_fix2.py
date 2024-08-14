@@ -2,11 +2,11 @@ import numpy as np
 from daal4py.sklearn._utils import getFPType
 from daal4py.sklearn.cluster._k_means_0_23 import _daal4py_compute_starting_centroids
 try:
-    # from ._HDC_utils import _relocate_empty_clusters, _harmonic_discrepancy
+    from ._HDC_utils import _relocate_empty_clusters, _harmonic_discrepancy
     from .distances import get_distances
     from .utils import _kmeans_plusplus as _kmeans_pp2
 except:
-    # from _HDC_utils import _relocate_empty_clusters, _harmonic_discrepancy
+    from _HDC_utils import _relocate_empty_clusters, _harmonic_discrepancy
     from distances import get_distances
     from utils import _kmeans_plusplus as _kmeans_pp2
 

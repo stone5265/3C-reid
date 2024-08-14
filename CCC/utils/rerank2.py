@@ -1,7 +1,7 @@
 import numpy as np
 
 # from time import time
-from utils._rerank import _V, _V_qe, _jaccard_dist
+from ._rerank import _V, _V_qe, _jaccard_dist
 
 
 def re_ranking(q_g_dist, q_q_dist, g_g_dist, k1=20, k2=6, lambda_value=0.3):
