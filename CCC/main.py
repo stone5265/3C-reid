@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np
 import os
+import os.path as osp
 import time
 import random
 import collections
@@ -62,17 +63,17 @@ def main_work(args):
     warmup_ckpt_dir += f'{args.warmup_iters}iters,{args.cm_mode},{args.pooling_type}'
     warmup_ckpt_dir += f',resnet{args.resnet_pretrained}' if 'ibn' not in args.arch else ',ibn_resnet'
     warmup_ckpt_dir += ',reweight' if args.loss_with_camera else ''
-    warmup_ckpt_dir = os.path.join(args.ckpt_dir, args.dataset, warmup_ckpt_dir)
-    exist_warmup_ckpt = os.path.exists(warmup_ckpt_dir)
+    warmup_ckpt_dir = osp.join(args.ckpt_dir, args.dataset, warmup_ckpt_dir)
+    exist_warmup_ckpt = osp.exists(warmup_ckpt_dir)
 
     # Model
     model = models.create(args.arch, pretrained=args.resnet_pretrained,
                           norm=True, pooling_type=args.pooling_type)
     num_features = model.num_features
     if load_warmup_ckpt and exist_warmup_ckpt:
-        model.load_state_dict(torch.load(os.path.join(warmup_ckpt_dir, 'model.pth')), strict=False)
+        model.load_state_dict(torch.load(osp.join(warmup_ckpt_dir, 'model.pth')), strict=False)
     model.to(device)
-    model = nn.DataParallel(model, device_ids=[0, 1])
+    model = nn.DataParallel(model)
 
     # Optimizer
     params = [{'params': [value]} for _, value in model.named_parameters() if value.requires_grad]
@@ -107,11 +108,11 @@ def main_work(args):
     logger_full = Logger(args, 'full-version')
     logger_hdc = HDC_Logger(args, start_epoch=args.warmup_iters, topk=50)
     if load_warmup_ckpt and exist_warmup_ckpt:
-        logger.resume(os.path.join(warmup_ckpt_dir, 'loss.txt'))
-        logger_full.resume(os.path.join(warmup_ckpt_dir, 'full_version.txt'), cluster_results=True)
+        logger.resume(osp.join(warmup_ckpt_dir, 'loss.txt'))
+        logger_full.resume(osp.join(warmup_ckpt_dir, 'full_version.txt'), cluster_results=True)
 
     # Checkpoint
-    ckpt_dir = os.path.join(args.ckpt_dir, args.dataset, logger.log_name)
+    ckpt_dir = osp.join(args.ckpt_dir, args.dataset, logger.log_name)
     os.makedirs(ckpt_dir)
 
     # Dataset
@@ -209,13 +210,13 @@ def main_work(args):
                 state_dict = collections.OrderedDict()
                 for k, v in model.state_dict().items():
                     state_dict[k.strip('module.')] = copy.deepcopy(v).cpu()
-                torch.save(state_dict, os.path.join(ckpt_dir, f'model_e{i_epoch+1}.pth'))
+                torch.save(state_dict, osp.join(ckpt_dir, f'model_e{i_epoch+1}.pth'))
             # Save best_mAP model
             if new_best:
                 state_dict = collections.OrderedDict()
                 for k, v in model.state_dict().items():
                     state_dict[k.strip('module.')] = copy.deepcopy(v).cpu()
-                torch.save(state_dict, os.path.join(ckpt_dir, f'model_best.pth'))
+                torch.save(state_dict, osp.join(ckpt_dir, f'model_best.pth'))
         else:
             logger_full.record(i_epoch, trainer, None, memory.num_clusters,
                                num_outliers, cluster_time, cluster_result=new_dataset)
@@ -226,10 +227,10 @@ def main_work(args):
             state_dict = collections.OrderedDict()
             for k, v in model.state_dict().items():
                 state_dict[k.strip('module.')] = copy.deepcopy(v).cpu()
-            torch.save(state_dict, os.path.join(warmup_ckpt_dir, 'model.pth'))
-            logger.save(os.path.join(warmup_ckpt_dir, 'loss.txt'))
-            logger_full.save(os.path.join(warmup_ckpt_dir, 'full_version.txt'))
-            logger.save_config(os.path.join(warmup_ckpt_dir, 'config.ini'))
+            torch.save(state_dict, osp.join(warmup_ckpt_dir, 'model.pth'))
+            logger.save(osp.join(warmup_ckpt_dir, 'loss.txt'))
+            logger_full.save(osp.join(warmup_ckpt_dir, 'full_version.txt'))
+            logger.save_config(osp.join(warmup_ckpt_dir, 'config.ini'))
 
     print('Training complete')
     logger.finish()
