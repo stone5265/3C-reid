@@ -48,7 +48,8 @@ We utilize 2 RTX-3090 GPUs for training. For more parameter configuration, pleas
 
 **examples:**
 
-Market-1501:
+<details>
+<summary>Market-1501</summary>
 
 1. Using HDC:
 ```shell
@@ -81,7 +82,10 @@ CUDA_VISIBLE_DEVICES=0,1 python CCC/main_kmeans.py  --dataset market1501 --heigh
 --root-dir $HOME/Dataset --log-dir logs/log_kmeans
 ```
 
-MSMT17:
+</details>
+
+<details>
+<summary>MSMT17</summary>
 
 1. Using HDC:
 ```shell
@@ -114,7 +118,10 @@ CUDA_VISIBLE_DEVICES=0,1 python CCC/main_kmeans.py  --dataset msmt17 --height 25
 --root-dir $HOME/Dataset --log-dir logs/log_kmeans
 ```
 
-VeRi-776:
+</details>
+
+<details>
+<summary>VeRi-776</summary>
 
 1. Using HDC:
 ```shell
@@ -147,6 +154,8 @@ CUDA_VISIBLE_DEVICES=0,1 python CCC/main_kmeans.py  --dataset veri --height 224 
 --root-dir $HOME/Dataset --log-dir logs/log_kmeans
 ```
 
+</details>
+
 ## Results
 
 ![sota](figs/sota.png)
@@ -160,7 +169,14 @@ For more detail experiment setup, please check `experiments/ablation_studies.py`
 
 If you find this code useful for your research, please cite our paper
 ```
-...
+@article{zheng2025CCC,
+  title={3C: Confidence-guided clustering and contrastive learning for unsupervised person re-identification},
+  author={Zheng, Mingxiao and Qu, Yanpeng and Li, Dongxuan and Shang, Changjing and Yang, Longzhi and Shen, Qiang},
+  journal={Neurocomputing},
+  pages={130368},
+  year={2025},
+  publisher={Elsevier}
+}
 ```
 
 # Acknowledgements
