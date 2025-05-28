@@ -13,17 +13,17 @@ import copy
 from torch.backends import cudnn
 from sklearn.cluster import DBSCAN
 
-import .models
-from .HDC import *
-from .trainer import Trainer
-from .evaluator import exact_features, Evaluator
-from .configs import config
-from .utils.dataloader import get_train_loader, get_test_loader
-from .utils.datasets import create
-from .utils.memory_table import MemoryTable
-from .utils.lr_scheduler import WarmupMultiStepLR, WarmupMultiStepLRv2
-from .utils.logger import Logger, HDC_Logger
-from .utils.faiss_rerank import compute_jaccard_distance
+import CCC.models as models
+from CCC.HDC import *
+from CCC.trainer import Trainer
+from CCC.evaluator import exact_features, Evaluator
+from CCC.configs import config
+from CCC.utils.dataloader import get_train_loader, get_test_loader
+from CCC.utils.datasets import create
+from CCC.utils.memory_table import MemoryTable
+from CCC.utils.lr_scheduler import WarmupMultiStepLR, WarmupMultiStepLRv2
+from CCC.utils.logger import Logger, HDC_Logger
+from CCC.utils.faiss_rerank import compute_jaccard_distance
 
 
 __HDC_factory = {

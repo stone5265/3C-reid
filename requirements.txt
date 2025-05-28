@@ -1,4 +1,5 @@
-numpy
+numpy<=1.26.4
+daal<=2025.5.0
 openpyxl
 tqdm
 scikit-learn>=1.5.0
